@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="Layout">
+<head>
+<meta charset="utf-8" />
+<title>ffff</title>
+
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+		<div class="container">
+			<div class="row ">
+			<div class="col-xs-24 col-sm-24 col-md-24 col-lg-18 col-xl-12">
+					<div class="card mb-3">
+						<div class="card-header">
+							<h3>
+								<i class="fa fa-users"></i> Managers Details
+							</h3>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
+							non luctus metus. Vivamus fermentum ultricies orci sit amet
+							sollicitudin.
+						</div>
+
+						<div class="card-body">
+							<table id="datatable"
+								class="table table-bordered table-responsive-xl table-hover display">
+								<thead>
+									<tr>
+										<th>Nom</th>
+										<th>Prenom</th>
+										<th>email</th>
+										<th>Date De Naissance</th>
+										<th>Date d'embauche</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="seria : ${User}">
+										<td th:text="${seria.nom}"></td>
+										<td th:text="${seria.prenom}"></td>
+										<td th:text="${seria.email}"></td>
+										<td th:text="${seria.dateNaissance}"></td>
+										<td th:text="${seria.dateEmbauche}"></td>
+										<td><button type="button" class="btn btn-outline-danger"
+												data-toggle="modal" data-target="#exampleModal">
+												<i class="fa fa-trash bigfonts" aria-hidden="true"></i>
+											</button>
+</td>
+
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+	</div>
+
+
+	<th:block layout:fragment="scripts">
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+
+				$('#datatable').dataTable({
+					'aoColumnDefs' : [ {
+						'bSortable' : false,
+						'aTargets' : [ -1 ]
+					/* 1st one, start by the right */
+					} ]
+				});
+
+			});
+		</script>
+
+
+
+	</th:block>
+
+
+	<!-- END main -->
+
+</body>
+</html>

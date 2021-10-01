@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="Layout.html">
+
+<head>
+<meta charset="utf-8" />
+
+<!-- Bootstrap CSS -->
+
+
+
+<script src="../static/js/modernizr.min.js"
+	th:src="@{/js/modernizr.min.js}"></script>
+<script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script src="../static/js/moment.min.js" th:src="@{/js/moment.min.js}"></script>
+
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<!-- Button to Open the Modal -->
+
+
+
+
+		<input type="hidden" id="id" />
+
+
+
+		<div class="container">
+
+			<div class=".container-fluid">
+				<button id="show" class="btn btn-primary">Ajouter un statut</button>
+
+
+				<div class="row">
+					<div class="col-xs-18 col-sm-18 col-md-18 col-lg-12 col-xl-6">
+						<div class="card mb-3">
+							<div class="card-header">
+								<h3>
+									<i class="fa fa-users"></i> Managers Details
+								</h3>
+
+							</div>
+
+							<div class="card-body">
+								<table id="datatable"
+									class="table table-bordered table-responsive-xl table-hover display">
+									<thead>
+										<tr>
+											<th>Statuts</th>
+											<th>Action</th>
+
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="seria : ${Statuts}" th:id="'row-'+${seria.id}">
+											<td th:text="${seria.statut}"></td>
+											<td>
+												<button class="btn btn-danger"
+													th:onclick="'delet(\''+${seria.id}+'\');'">
+													<i class="fa fa-exclamation-triangle bigfonts"
+														aria-hidden="true"></i>
+												</button>
+
+												<button class="btn btn-success"
+													th:onclick="'get_Id(\''+${seria.id}+'\');'">
+													<i class="fa fa-pencil bigfonts" aria-hidden="true"></i>
+												</button>
+											</td>
+										</tr>
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+
+
+
+					<div class="col-xs-18 col-sm-18 col-md-18 col-lg-12 col-xl-6">
+						<div class="menu" style="display: none;">
+							<div class="card mb-3">
+								<div class="card-header">
+									<h3>
+										<i class="fa fa-users"></i> Ajouter un statut
+									</h3>
+
+								</div>
+								<form action="#" th:action="@{/admin/AjouterStatut}" id="form"
+									method="post">
+									<div class="form-group container">
+										<label for="Statut">Statut (required)</label> <input
+											type="text" class="form-control" th:value="${Statut}"
+											aria-describedby="Entrer Statut" name="Statut" id="statut"
+											placeholder="Enter Statut" required> <small
+											class="form-text text-muted">We'll never share your
+											email with anyone else.</small>
+									</div>
+									<div class="col-md-2 col-xs-1">
+										<button type="submit" id="save"
+											class="btn form-group  btn-primary form-control">Save</button>
+									</div>
+								</form>
+								<div class="col-md-3 col-xs-2">
+
+									<button id="update"
+										class="btn form-group  btn-success form-control"
+										onclick="update()">Modifier</button>
+								</div>
+								<div class="card-footer small text-muted">Submit</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</th:block>
+
+	<th:block layout:fragment="scripts">
+
+
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"
+			th:src="@{https://unpkg.com/sweetalert/dist/sweetalert.min.js}">
+			
+		</script>
+		<script>
+		
+			$(document).ready(function() {
+				var table=$('#datatable').dataTable({
+					"paging" : false,
+					"iDisplayLength" : 5,
+					'aoColumnDefs' : [ {
+						'bSortable' : false,
+						'aTargets' : [ -1 ],
+					/* 1st one, start by the right */
+					} ],
+				});
+				
+				$('#show').click(function() {
+					$('.menu').toggle("slide");
+					$("#id").val("");
+					$("#statut").val("");
+					$("#save").show();
+					$("#update").hide();
+				});
+
+			});
+			function get_Id(id) {
+				$('.menu').toggle("slide");
+				var a = $("#row-" + id + " td");
+				$("#id").val(id);
+				console.log(a[0].innerHTML);
+				$("#statut").val(a[0].innerHTML);
+				$("#update").show();
+				$("#save").hide();
+
+			}
+			function delet(prof) {
+				swal({
+					  title: "Are you sure?",
+					  text: "Once deleted, you will not be able to recover this imaginary file!",
+					  icon: "warning",
+					  buttons: true,
+					  dangerMode: true,
+					})
+					.then((willDelete) => {
+					  if (willDelete) {
+						  var token = $('#_csrf').attr('content');
+							var header = $('#_csrf_header').attr('content');
+							$.ajax({
+								url : "/admin/supprimerStatut",
+								type : "POST",
+								beforeSend : function(xhr) {
+									xhr.setRequestHeader(header, token);
+								},
+								data : {
+									id : prof
+								},
+								success : function() {
+									$('#datatable').DataTable().row("#row-" + prof)
+											.remove().draw();
+								},
+
+							});
+					    swal("Poof! Your imaginary file has been deleted!", {
+					      icon: "success",
+					    });
+					  } else {
+					    swal("Your imaginary file is safe!");
+					  }
+					});
+			}
+			function update() {
+				swal({
+					  title: "Are you sure?",
+					  text: "Once Updates",
+					  icon: "info",
+					  buttons: true,
+					  dangerMode: true,
+					})
+					.then((willDelete) => {
+					  if (willDelete) {
+						  var token = $('#_csrf').attr('content');
+							var header = $('#_csrf_header').attr('content');
+							$.ajax({
+								url : "/admin/AjouterStatut",
+								type : "POST",
+								beforeSend : function(xhr) {
+									xhr.setRequestHeader(header, token);
+								},
+								data : {
+									id : $("#id").val(),
+									Statut:$("#statut").val()
+								},
+								success : function() {
+									 var a=$("#row-"+$("#id").val()+" td");
+						            	a[0].innerHTML= $("#statut").val();
+								},
+
+							});
+					    swal("Poof! Your update has  been  has been made!", {
+					      icon: "success",
+					    });
+					  } else {
+					    swal("Your imaginary file is safe!");
+					  }
+					});
+			}
+		</script>
+
+	</th:block>
+
+
+</body>
+</html>

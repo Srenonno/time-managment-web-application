@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="Layout.html">
+
+<head>
+<meta charset="utf-8" />
+
+<!-- Bootstrap CSS -->
+
+
+<link href="../static/plugins/datetimepicker/css/daterangepicker.css"
+	th:href="@{/plugins/datetimepicker/css/daterangepicker.css}"
+	rel="stylesheet" />
+<script src="../static/js/modernizr.min.js"
+	th:src="@{/js/modernizr.min.js}"></script>
+<script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script src="../static/js/moment.min.js" th:src="@{/js/moment.min.js}"></script>
+
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<!-- Button to Open the Modal -->
+
+
+
+
+
+
+
+
+			<button id="show" class="btn btn-primary">Ajouter un client</button>
+
+
+			<div class="row">
+				
+
+
+
+
+				<div class="col-xs-24 col-sm-24 col-md-24 col-lg-18 col-xl-12">
+					<div class="menu" style="display: none;">
+						<div class="card mb-3 ">
+							<div class="card-header">
+								<h3>
+									<i class="fa fa-users"></i> Formulaire client
+								</h3>
+
+							</div>
+							<div class="container">
+								<form action="#" th:action="@{/admin/AjouterClient}"
+									method="post">
+									<input type="hidden" id="id" th:value="*{id}" name="id" />
+									<div class="form-group">
+										<label for="nom">Nom (required)</label> <input type="text"
+											class="form-control" id="nom" th:value="*{nom}"
+											aria-describedby="Entrer nom" name="nom"
+											placeholder="Enter nom" required> <small
+											class="form-text text-muted">We'll never share your
+											email with anyone else.</small>
+									</div>
+									<div class="form-group">
+										<label for="prenom">Prenom (required)</label> <input
+											type="text" class="form-control" id="prenom"
+											aria-describedby="Entrer prenom" th:value="*{prenom}"
+											placeholder="Enter prenom" name="prenom" required>
+									</div>
+									<div class="form-group">
+										<label for="prenom">Address (required)</label>
+
+										<textarea required class="form-control" id="address"
+											th:value="*{address}" name="address"></textarea>
+									</div>
+									<div class="form-group">
+										<label for="NumTel">Numero de telephone (required)</label> <input
+											type="tel" class="form-control" th:value="*{numeroTel}"
+											id="numeroTel" name="numeroTel" required> <small
+											id="prenom" class="form-text text-muted">We'll never
+											share your email with anyone else.</small>
+									</div>
+									<div class="form-group">
+										<label for="prenom">Date De Naissance (required)</label> <input
+											type="text" class="form-control" th:value="*{dateNaissance}"
+											name="dateNaissance" id="naissance" required>
+
+										<script>
+										$(function() {
+											$('input[name="dateNaissance"]')
+													.daterangepicker(
+															{
+																singleDatePicker : true,
+																showDropdowns : true,
+																locale : {
+																	format : 'YYYY-MM-DD',
+																	"separator": " - ",
+															        "applyLabel": "Apply",
+															        "cancelLabel": "Cancel",
+															        "fromLabel": "From",
+															        "toLabel": "To",
+															        "customRangeLabel": "Custom",
+															        "daysOfWeek": [
+															            "Di",
+															            "Lu",
+															            "Mar",
+															            "Mer",
+															            "Je",
+															            "Ven",
+															            "Sa"
+															        ],
+															        "monthNames": [
+															            "Janvier",
+															            "Fevrier",
+															            "Mars",
+															            "Avril",
+															            "Mai",
+															            "Juin",
+															            "Juillet",
+															            "Aout",
+															            "September",
+															            "October",
+															            "November",
+															            "December"
+															        ],
+															        "firstDay": 1
+															    }
+															});
+
+										});
+									</script>
+
+									</div>
+									<div class="form-group">
+										<label for="exampleInputEmail1">Address
+											Email(required)</label> <input type="email" class="form-control"
+											id="email" th:value="*{email}" name="email"
+											aria-describedby="emailHelp" placeholder="Enter email"
+											required> <small id="emailHelp"
+											class="form-text text-muted">We'll never share your
+											email with anyone else.</small>
+									</div>
+									<div class="col-md-3 col-xs-1">
+										<button type="submit" id="save"
+											class="btn form-group  btn-primary form-control">Enregistrer</button>
+									</div>
+								</form>
+								<div class="col-md-3 col-xs-1">
+
+									<button id="update"
+										class="btn form-group  btn-success form-control"
+										onclick="update()">Modifier</button>
+								</div>
+							</div>
+							<div class="card-footer small text-muted">Submit</div>
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="col-xs-24 col-sm-24 col-md-24 col-lg-18 col-xl-12">
+					<div class="card mb-3">
+						<div class="card-header">
+							<h3>
+								<i class="fa fa-users"></i> Client Details
+							</h3>
+
+						</div>
+
+						<div class="card-body">
+							<table id="datatable"
+								class="table table-bordered table-responsive-xl table-hover display">
+								<thead>
+									<tr>
+										<th>Nom</th>
+										<th>Prenom</th>
+										<th>Address</th>
+										<th>Numero Telephone</th>
+										<th>email</th>
+										<th>Date de Naissance</th>
+
+										<th>Action</th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="seria : ${Client}" th:id="'row-'+${seria.id}">
+										<td th:text="${seria.nom}"></td>
+										<td th:text="${seria.prenom}"></td>
+										<td th:text="${seria.address}"></td>
+										<td th:text="${seria.numeroTel}"></td>
+										<td th:text="${seria.email}"></td>
+										<td th:text="${seria.dateNaissance}"></td>
+
+										<td>
+											<button class="btn btn-danger"
+												th:onclick="'delet(\''+${seria.id}+'\');'">
+												<i class="fa fa-exclamation-triangle bigfonts"
+													aria-hidden="true"></i>
+											</button>
+
+											<button class="btn btn-success"
+												th:onclick="'get_Id(\''+${seria.id}+'\');'">
+												<i class="fa fa-pencil bigfonts" aria-hidden="true"></i>
+											</button>
+										</td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+
+	</th:block>
+
+	<th:block layout:fragment="scripts">
+
+
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"
+			th:src="@{https://unpkg.com/sweetalert/dist/sweetalert.min.js}">
+			<script src="../static/plugins/datetimepicker/js/moment.min.js"
+				th:src="@{/plugins/datetimepicker/js/moment.min.js}"></script>
+
+		<script src="../static/plugins/datetimepicker/js/daterangepicker.js"
+			th:src="@{/plugins/datetimepicker/js/daterangepicker.js}"></script>
+		<div th:if="${param.success}">
+			<script type="text/javascript">
+			swal("Enregistrement reussi!", "You clicked the button!", "success");
+
+			</script>
+		</div>
+
+		<script>
+		
+			$(document).ready(function() {
+				$('#datatable').dataTable({
+					"paging" : false,
+					"info":     false,
+					"iDisplayLength" : 5,
+					'aoColumnDefs' : [ {
+						'bSortable' : false,
+						'aTargets' : [ -1 ],
+					/* 1st one, start by the right */
+					} ],
+				});
+				var curday = function(){
+					today = new Date();
+					var dd = today.getDate();
+					var mm = today.getMonth()+1; //As January is 0.
+					var yyyy = today.getFullYear();
+
+					if(dd<10) dd='0'+dd;
+					if(mm<10) mm='0'+mm;
+					return (yyyy+'-'+mm+'-'+dd);
+					};
+				
+				$('#show').click(function() {
+					$('.menu').toggle("slide");
+					$("#id").val("");
+					$("#nom").val("");
+					$("#prenom").val("");
+					$("#address").val("");
+					$("#email").val("");
+					$("#numeroTel").val("");
+					$("#naissance").val(curday());
+					$("#save").show();
+					$("#update").hide();
+				});
+				
+
+			});
+			function get_Id(id) {
+				$('.menu').toggle("slide");
+				var a = $("#row-" + id + " td");
+				$("#id").val(id);
+				$("#nom").val(a[0].innerHTML);
+				$("#prenom").val(a[1].innerHTML);
+				$("#address").val(a[2].innerHTML);
+				$("#numeroTel").val(a[3].innerHTML);
+				$("#naissance").val(a[5].innerHTML);
+				$("#email").val(a[4].innerHTML);
+				$("#update").show();
+				$("#save").hide();
+
+			
+			}
+			function delet(prof) {
+				swal({
+					  title: "êtes vous sure de vouloir supprimer ?",
+					  icon: "warning",
+					  buttons: true,
+					  dangerMode: true,
+					})
+					.then((willDelete) => {
+					  if (willDelete) {
+						  var token = $('#_csrf').attr('content');
+							var header = $('#_csrf_header').attr('content');
+							$.ajax({
+								url : "/admin/supprimerClient",
+								type : "POST",
+								beforeSend : function(xhr) {
+									xhr.setRequestHeader(header, token);
+								},
+								data : {
+									id : prof
+								},
+								success : function() {
+									$('#datatable').DataTable().row("#row-" + prof)
+											.remove().draw();
+								},
+
+							});
+					    swal("Poof! suppression réussie !", {
+					      icon: "success",
+					    });
+					  } else {
+					    swal("Your imaginary file is safe!");
+					  }
+					});
+			}
+			function update() {
+				swal({
+					  title: "êtes vous sure?",
+					  text: "Modifier",
+					  icon: "info",
+					  buttons: true,
+					  dangerMode: true,
+					})
+					.then((willDelete) => {
+					  if (willDelete) {
+						  var token = $('#_csrf').attr('content');
+							var header = $('#_csrf_header').attr('content');
+							$.ajax({
+								url : "/admin/AjouterClient",
+								type : "POST",
+								beforeSend : function(xhr) {
+									xhr.setRequestHeader(header, token);
+								},
+								data : {
+									id : $("#id").val(),
+									nom:$("#nom").val(),
+									prenom:$("#prenom").val(),
+									address:$("#address").val(),
+								    email:$("#email").val(),
+								    numeroTel:$("#numeroTel").val(),
+								    dateNaissance:$("#dateNaissance").val()
+								},
+								success : function() {
+									 var a=$("#row-"+$("#id").val()+" td");
+						            
+									 a[0].innerHTML=$("#nom").val();
+									 a[1].innerHTML=$("#prenom").val();
+									 a[2].innerHTML=$("#address").val();
+									 a[3].innerHTML=$("#numeroTel").val();
+									 a[5].innerHTML=	$("#naissance").val();
+									 a[4].innerHTML=$("#email").val();
+								},
+
+							});
+					    swal("Poof!Votre modification a bien été prise en compte !", {
+					      icon: "success",
+					    });
+					  } else {
+					    swal("Your imaginary file is safe!");
+					  }
+					});
+			}
+		</script>
+
+	</th:block>
+
+
+</body>
+</html>

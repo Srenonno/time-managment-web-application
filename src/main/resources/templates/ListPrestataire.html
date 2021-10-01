@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="Layout">
+<head>
+<meta charset="utf-8" />
+<title>Liste employer</title>
+
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+		<div class="container" >
+			<div class="row ">
+				<div class="col-xs-24 col-sm-24 col-md-12 col-lg-12 col-xl-12">
+					<div class="card mb-3">
+						<div class="card-header" style="background-color:lightblue;">
+							<h3>
+								<i class="fa fa-users"></i> Managers Details
+							</h3>
+						
+						</div>
+
+						<div class="card-body">
+							<table id="datatable"
+								class="table table-bordered table-responsive-xl table-hover display">
+								<thead>
+									<tr>
+										<th>Nom</th>
+										<th>Prenom</th>
+										<th>email</th>
+										<th>Date De Naissance</th>
+										<th>Date d'embauche</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="seria : ${User}">
+										<td th:text="${seria.nom}"></td>
+										<td th:text="${seria.prenom}"></td>
+										<td th:text="${seria.email}"></td>
+										<td th:text="${seria.dateNaissance}"></td>
+										<td th:text="${seria.dateEmbauche}"></td>
+
+										<td>
+											<div sec:authorize="hasRole('ROLE_ADMIN')">
+												<button type="button" class="btn btn-outline-danger"
+													data-toggle="modal" data-target="#exampleModal">
+													<i class="fa fa-trash bigfonts" aria-hidden="true"></i>
+												</button>
+												<button type="button" class="btn btn-outline-info">
+													<a th:href="@{/admin/Enregistrer/{id}(id=${seria.id})}">
+														<i class="fa fa-info-circle bigfonts" aria-hidden="true"></i>
+													</a>
+												</button>
+												<button type="button" class="btn btn-outline-success"
+													data-toggle="modal" data-target=".bd-example-modal-lg"
+													th:data-thing="${seria.id}"
+													th:onclick="manager(this.getAttribute('data-thing'));">
+													<i class="fa fa-group bigfonts" aria-hidden="true"></i>
+												</button>
+											</div>
+
+											<div sec:authorize="hasRole('ROLE_MANAGER')">
+											<button type="button" class="btn btn-outline-success"
+													data-toggle="modal" data-target=".bd-example-modal-lg"
+													th:data-thing="${seria.id}"
+													th:onclick="manager(this.getAttribute('data-thing'));">
+													<i class="fa fa-group bigfonts" aria-hidden="true"></i>
+												</button>
+											</div>
+										</td>
+
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+
+
+	</div>
+
+
+	<th:block layout:fragment="scripts">
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#datatable').dataTable({
+					'aoColumnDefs' : [ {
+						'bSortable' : false,
+						'aTargets' : [ -1 ]
+					/* 1st one, start by the right */
+					} ]
+				});
+
+				/*  $.ajax({
+				     url: '/admin/list/Manager/',
+				     type: 'GET',
+				    
+				     contentType: 'application/json; charset=utf-8',
+				     datatype: 'json',
+				     success: function (data) {
+				          $('#datatable').dataTable({
+				             data: data,
+				             columns: [
+				                
+				                 { 'data': 'nom' },
+				                 { 'data': 'prenom' },
+				                 { 'data': 'email' },
+				                 { 'data': 'dateNaissance' },
+				                 { 'data': 'dateEmbauche' }
+				             ]
+				         }); 
+				     }
+				 }); */
+			});
+		</script>
+
+
+
+	</th:block>
+
+
+	<!-- END main -->
+
+</body>
+</html>

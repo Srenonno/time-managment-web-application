@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="Layout.html">
+
+<head>
+<meta charset="utf-8" />
+
+<!-- Bootstrap CSS -->
+
+
+<link href="../static/plugins/datetimepicker/css/daterangepicker.css"
+	th:href="@{/plugins/datetimepicker/css/daterangepicker.css}"
+	rel="stylesheet" />
+<script src="../static/js/modernizr.min.js"
+	th:src="@{/js/modernizr.min.js}"></script>
+<script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script src="../static/js/moment.min.js" th:src="@{/js/moment.min.js}"></script>
+
+</head>
+<body>
+	<th:block layout:fragment="content">
+		<!-- Button to Open the Modal -->
+
+
+
+
+
+
+
+
+
+
+		<div class="row">
+
+			<div class="col-xs-24 col-sm-24 col-md-24 col-lg-18 col-xl-12">
+					<button id="show" class="btn btn-primary">Ajouter un contrat</button>
+			
+				<div class="menu" style="display: none;">
+					<div class="card mb-3 ">
+						<div class="card-header">
+							<h3>
+								<i class="fa fa-file-text-o bigfonts"></i> Ajouter un contrat
+							</h3>
+
+						</div>
+						<div class="container">
+							<form action="#" th:action="@{/admin/AjouterContrat}"
+								method="post">
+								<input type="hidden" id="id" th:value="*{id}" name="id" />
+								<div class="form-group">
+									<label for="nom">L’intitulé (required)</label> <input
+										type="text" class="form-control" id="intitule"
+										th:value="*{intitule}" aria-describedby="Intitulé"
+										name="intitule" placeholder="Enter l’intitulé" required>
+									<small class="form-text text-muted">We'll never share
+										your email with anyone else.</small>
+								</div>
+								<div class="form-group">
+									<label for="description">Description (required)</label>
+									<textarea required class="form-control" id="description"
+										th:value="*{description}" name="description"></textarea>
+								</div>
+
+								<div class="form-group">
+									<label for="nom">Client (required)</label> <select
+										class="custom-select d-block my-3" th:value="${client}"
+										name="client" style="height: 35px;" id="client" required>
+										<option value="">--</option>
+										<option th:each="r : ${Clients}" th:value="${r.Id}"
+											th:text="${r.nom+' '+r.prenom}" />
+									</select>
+								</div>
+								<div class="form-group">
+									<label for="prenom">Date de Contrat (required)</label> <input
+										type="text" class="form-control" th:value="*{dateContrat}"
+										name="dateContrat" id="dateContrat" required>
+
+									<script>
+										$(function() {
+											$('input[name="dateContrat"]')
+													.daterangepicker(
+															{
+																singleDatePicker : true,
+																showDropdowns : true,
+																locale : {
+																	format : 'YYYY-MM-DD',
+																	"separator": " - ",
+															        "applyLabel": "Apply",
+															        "cancelLabel": "Cancel",
+															        "fromLabel": "From",
+															        "toLabel": "To",
+															        "customRangeLabel": "Custom",
+															        "daysOfWeek": [
+															            "Di",
+															            "Lu",
+															            "Mar",
+															            "Mer",
+															            "Je",
+															            "Ven",
+															            "Sa"
+															        ],
+															        "monthNames": [
+															            "Janvier",
+															            "Fevrier",
+															            "Mars",
+															            "Avril",
+															            "Mai",
+															            "Juin",
+															            "Juillet",
+															            "Aout",
+															            "September",
+															            "October",
+															            "November",
+															            "December"
+															        ],
+															        "firstDay": 1
+															    }
+															});
+
+										});
+									</script>
+
+								</div>
+								<div class="form-group">
+									<label for="prenom">Date de fin prevue (required)</label> <input
+										type="text" class="form-control" th:value="*{dateFinPrevue}"
+										name="dateFinPrevue" id="dateFinPrevue" required>
+
+									<script>
+									$(function() {
+										$('input[name="dateFinPrevue"]')
+												.daterangepicker(
+														{
+															singleDatePicker : true,
+															showDropdowns : true,
+															locale : {
+																format : 'YYYY-MM-DD',
+																"separator": " - ",
+														        "applyLabel": "Apply",
+														        "cancelLabel": "Cancel",
+														        "fromLabel": "From",
+														        "toLabel": "To",
+														        "customRangeLabel": "Custom",
+														        "daysOfWeek": [
+														            "Di",
+														            "Lu",
+														            "Mar",
+														            "Mer",
+														            "Je",
+														            "Ven",
+														            "Sa"
+														        ],
+														        "monthNames": [
+														            "Janvier",
+														            "Fevrier",
+														            "Mars",
+														            "Avril",
+														            "Mai",
+														            "Juin",
+														            "Juillet",
+														            "Aout",
+														            "September",
+														            "October",
+														            "November",
+														            "December"
+														        ],
+														        "firstDay": 1
+														    }
+															
+														});
+
+									});
+									</script>
+
+								</div>
+								<div class="form-group">
+									<label for="description">Budjet Estimé (required)</label> <input
+										required type="number" class="form-control"
+										id="budgetTotaleEstime" th:value="*{budgetTotaleEstime}"
+										name="budgetTotaleEstime" />
+								</div>
+
+								<div class="col-md-3 col-xs-1">
+									<button type="submit" id="save"
+										class="btn form-group  btn-primary form-control">Enregistrer</button>
+								</div>
+							</form>
+							
+						</div>
+						<div class="card-footer small text-muted">Submit</div>
+					</div>
+				</div>
+			</div>
+	
+		
+			<div class="col-xs-24 col-sm-24 col-md-24 col-lg-18 col-xl-12">
+			<div class="card mb-3">
+				<div class="card-header">
+					<h3>
+						<i class="fa fa-users"></i> Managers Details
+					</h3>
+
+				</div>
+
+				<div class="card-body">
+					<table id="datatable"
+						class="table table-bordered table-responsive-xl table-hover display">
+						<thead>
+							<tr>
+								<th>L'initule</th>
+								<th>Description</th>
+								<th>Client</th>
+								<th>Date du contrat</th>
+								<th>Budget estime</th>
+								<th>Date de Fin Prevue</th>
+
+								<th>Action</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="seria : ${Contrats}" th:id="'row-'+${seria.id}">
+								<td th:text="${seria.intitule}"></td>
+								<td th:text="${seria.description}"></td>
+								<td th:text="${seria.client.nom +' '+seria.client.prenom}"></td>
+								<td th:text="${seria.dateContrat}"></td>
+								<td th:text="${seria.budgetTotaleEstime}"></td>
+								<td th:text="${seria.dateFinPrevue}"></td>
+
+								<td>
+									<button class="btn btn-danger"
+										th:onclick="'delet(\''+${seria.id}+'\');'">
+										<i class="fa fa-exclamation-triangle bigfonts"
+											aria-hidden="true"></i>
+									</button>
+
+									<button class="btn btn-success"
+										th:onclick="'get_Id(\''+${seria.id}+'\',\''+${seria.client.id}+'\');'">
+										<i class="fa fa-pencil bigfonts" aria-hidden="true"></i>
+									</button>
+								</td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		</div>
+
+
+	</th:block>
+
+	<th:block layout:fragment="scripts">
+
+
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"
+			th:src="@{https://unpkg.com/sweetalert/dist/sweetalert.min.js}">
+			<script src="../static/plugins/datetimepicker/js/moment.min.js"
+				th:src="@{/plugins/datetimepicker/js/moment.min.js}"></script>
+		<script src="../static/plugins/select2/js/select2.min.js"
+			th:src="@{/plugins/select2/js/select2.min.js}"></script>
+
+		<script src="../static/plugins/datetimepicker/js/daterangepicker.js"
+			th:src="@{/plugins/datetimepicker/js/daterangepicker.js}"></script>
+		<div th:if="${param.success}">
+			<script type="text/javascript">
+			swal("Enregistrement reussi!", "You clicked the button!", "success");
+
+			</script>
+		</div>
+		<div th:if="${param.update}">
+			<script type="text/javascript">
+			swal("Modification reussi!", "You clicked the button!", "success");
+
+			</script>
+		</div>
+
+		<script>
+		
+			$(document).ready(function() {
+			    $('.select2').select2();
+				$('#datatable').dataTable({
+					"paging" : false,
+					"iDisplayLength" : 5,
+					'aoColumnDefs' : [ {
+						'bSortable' : false,
+						'aTargets' : [ -1 ],
+					/* 1st one, start by the right */
+					} ],
+				});
+				var curday = function(){
+					today = new Date();
+					var dd = today.getDate();
+					var mm = today.getMonth()+1; //As January is 0.
+					var yyyy = today.getFullYear();
+
+					if(dd<10) dd='0'+dd;
+					if(mm<10) mm='0'+mm;
+					return (yyyy+'-'+mm+'-'+dd);
+					};
+				
+				$('#show').click(function() {
+					$('.menu').toggle("slide");
+					$("#id").val("");
+					$("#intitule").val("");
+					$("#description").val("");
+					$("#client").val("");
+					$("#dateContrat").val(curday());
+					$("#dateFinPrevue").val(curday());
+					$("#budgetTotaleEstime").val("");
+				
+				});
+				
+
+			});
+			function get_Id(id,client_id) {
+				$('.menu').toggle("slide");
+				var a = $("#row-" + id + " td");
+				$("#id").val(id);
+				$("#intitule").val(a[0].innerHTML);
+				$("#description").val(a[1].innerHTML);
+				$("#client").val(client_id);
+				$("#dateContrat").val(a[3].innerHTML);
+				$("#dateFinPrevue").val(a[5].innerHTML);
+				$("#budgetTotaleEstime").val(a[4].innerHTML);
+				$("#update").show();
+			
+			
+			}
+			function delet(prof) {
+				swal({
+					  title: "Are you sure?",
+					  text: "Once deleted, you will not be able to recover this imaginary file!",
+					  icon: "warning",
+					  buttons: true,
+					  dangerMode: true,
+					})
+					.then((willDelete) => {
+					  if (willDelete) {
+						  var token = $('#_csrf').attr('content');
+							var header = $('#_csrf_header').attr('content');
+							$.ajax({
+								url : "/admin/supprimerContrat",
+								type : "POST",
+								beforeSend : function(xhr) {
+									xhr.setRequestHeader(header, token);
+								},
+								data : {
+									id : prof
+								},
+								success : function() {
+									$('#datatable').DataTable().row("#row-" + prof)
+											.remove().draw();
+								},
+
+							});
+					    swal("Poof! Your imaginary file has been deleted!", {
+					      icon: "success",
+					    });
+					  } else {
+					    swal("Your imaginary file is safe!");
+					  }
+					});
+			}
+			
+		</script>
+
+	</th:block>
+
+
+</body>
+</html>

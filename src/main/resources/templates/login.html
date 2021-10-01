@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+<title>Log in</title>
+<meta charset="utf-8" />
+
+<link rel="shortcut icon" href="../static/images/favicon.ico"
+	th:href="@{/css/images/favicon.ico}" />
+
+<!-- Bootstrap CSS -->
+<link href="../static/css/bootstrap.min.css"
+	th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"
+	th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css}">
+
+
+<script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script src="../static/js/bootstrap.min.js"
+	th:src="@{/js/bootstrap.min.js}"></script>
+
+
+<!-- Font Awesome CSS -->
+<link href="../static/font-awesome/css/font-awesome.min.css"
+	th:href="@{/font-awesome/css/font-awesome.min.css}" rel="stylesheet"
+	type="text/css" />
+<body style="background-color: #efefef;">
+
+	<div style="width: 40%; margin-top: 5%;" class="container">
+		<div class="card mb-3">
+			<div class="card-header">
+				<h3>
+					<i class="fa fa-check-square-o"></i>Authentification
+				</h3>
+				Be sure to use an appropriate <i>type</i> attribute on all inputs
+				(e.g., <i>email</i> for email address or <i>number</i> for numerical
+				information) to take advantage of newer input controls like email
+				verification, number selection, and more.
+			</div>
+
+			<div class="card-body" style="background-color: #fff;">
+
+				<form action="home" th:action="@{/login}" method="post">
+
+					<div class="form-group has-feedback">
+
+						<input type="email" class="form-control" name="username"
+							placeholder="Email" /> <span
+							class="glyphicon glyphicon-envelope form-control-feedback"></span>
+					</div>
+					<div class="form-group has-feedback">
+						<input type="password" class="form-control" name="password"
+							placeholder="Password" /> <span
+							class="glyphicon glyphicon-lock form-control-feedback"></span>
+					</div>
+
+					<div class="row">
+						<div class="form-group col-xs-offset-8 col-xs-4">
+							<button type="submit" class="btn btn-primary  ">LogIn</button>
+						</div>
+					</div>
+					
+					
+					<div class="row">
+						<div class="col-xs-12">
+							<div th:if="${param.error}"
+								class="alert alert-danger alert-dismissable">
+								<p>
+									<i class="icon fa fa-ban"></i> <span>Email ou Mot de passe invalide</span>
+								</p>
+							</div>
+							<div th:if="${param.logout}"
+								class="alert alert-info alert-dismissable">
+								<p>
+									<i class="icon fa fa-info"></i> <span>You have been
+										logged out.</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- end card-->
+
+
+
+</body>
+</html>

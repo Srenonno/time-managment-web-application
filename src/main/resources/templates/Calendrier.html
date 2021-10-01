@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="Layout.html">
+<head>
+<meta charset="utf-8" />
+<title>Home</title>
+
+
+<link href="../static/plugins/fullcalendar/fullcalendar.min.css"
+	rel="stylesheet"
+	th:href="@{/plugins/fullcalendar/fullcalendar.min.css}" />
+<style type="text/css">
+#external-events .fc-event {
+	margin: 10px 0;
+	cursor: pointer;
+}
+
+#calendar {
+	width: 100%;
+}
+
+.fc-event {
+	font-size: 1em;
+	border-radius: 2px;
+	border: none;
+	padding: 5px;
+}
+
+.fc-day-grid-event .fc-content {
+	color: #fff;
+}
+
+.fc-button {
+	background: #eaeaea;
+	border: none;
+	color: #666b6f;
+	margin: 0 3px !important;
+	padding: 5px 12px !important;
+	text-transform: capitalize;
+	height: auto !important;
+	box-shadow: none !important;
+	border-radius: 3px !important;
+}
+
+.fc-state-down, .fc-state-active, .fc-state-disabled {
+	background-color: #009ffc !important;
+	color: #ffffff !important;
+	text-shadow: none !important;
+}
+
+.fc-toolbar h2 {
+	font-size: 20px;
+	font-weight: 600;
+	line-height: 28px;
+	text-transform: uppercase;
+}
+
+.fc th.fc-widget-header {
+	background: #e6e6e6;
+	font-size: 13px;
+	text-transform: uppercase;
+	line-height: 18px;
+	padding: 10px 0px;
+}
+
+.fc-unthemed th, .fc-unthemed td, .fc-unthemed thead, .fc-unthemed tbody,
+	.fc-unthemed .fc-divider, .fc-unthemed .fc-row, .fc-unthemed .fc-popover
+	{
+	border-color: #eff1f3;
+}
+</style>
+</head>
+<body>
+	<th:block layout:fragment="content">
+
+
+
+		<div class="row">
+			<div class="col-xl-12">
+				<div class="breadcrumb-holder">
+					<h1 class="main-title float-left">Calendar</h1>
+					<ol class="breadcrumb float-right">
+						<li class="breadcrumb-item">Home</li>
+						<li class="breadcrumb-item active">Calendar</li>
+					</ol>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+		<!-- end row -->
+
+
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+			aria-labelledby="myModal" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel2">Modal title</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body container">
+						<input type="hidden" id="start" /> <input type="hidden" id="end" />
+					<input type="hidden" id="id" /> 
+						
+
+						<div class="form-group">
+							<label for="intitule">Intitulé</label> <input type="text"
+								class="form-control" id="intitule" th:value="*{intitule}"
+								aria-describedby="Intitulé" name="intitule"
+								placeholder="Enter l’intitulé" required>
+						</div>
+						<div class="form-group">
+							<label for="description">Description</label>
+							<textarea required class="form-control" id="description"
+								th:value="*{description}" name="description"></textarea>
+						</div>
+						<div class="form-group">
+							<label for="intitule">Choisie un contrat</label> <select
+								class="custom-select d-block my-3" th:value="${contrat}"
+								name="client" style="height: 35px;" id="contrat" required>
+								<option value="">--</option>
+								<option th:each="r : ${Contrats}" th:value="${r.Id}"
+									th:text="${r.intitule}" />
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="intitule">Choisie le profil</label> <select
+								class="custom-select d-block my-3" th:value="${profil}"
+								name="client" style="height: 35px;" id="profil" required>
+								<option value="">--</option>
+								<option th:each="r : ${Profils}" th:value="${r.Id}"
+									th:text="${r.profil}" />
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="intitule">Choisie une couleur</label> <select
+								class="custom-select d-block my-3" 
+								name="client" style="height: 35px;" id="colour" required>
+								<option value="">--</option>
+								<option value="bg-primary">primary</option>
+								<option value="bg-info">info</option>
+								<option value="bg-success">success</option>
+								<option value="bg-warning">Orange</option>
+								<option value="bg-danger">Rouge</option>
+								<option value="bg-secondary">Secondaire </option>
+								
+							</select>
+						</div>
+
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary" onclick="addEvent()"
+							data-dismiss="modal">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<div class="col-xs-24 col-sm-24 col-md-24 col-lg-18 col-xl-12">
+		
+			<div class="card-box tilebox-one noradius">
+				<div id="calendar"></div>
+				<div class="clearfix"></div>
+
+			</div>
+		</div>
+		<!-- end row -->
+
+
+
+
+
+	</th:block>
+
+
+	<th:block layout:fragment="scripts">
+
+		<script src="../static/js/jquery-ui.min.js"
+			th:src="@{/js/jquery-ui.min.js}"></script>
+		<script src="../static/plugins/fullcalendar/fullcalendar.min.js"
+			th:src="@{/plugins/fullcalendar/fullcalendar.min.js}"></script>
+		<script src="../static/plugins/fullcalendar/locale/fr-ch.js"
+			th:src="@{/plugins/fullcalendar/locale/fr-ca.js}"></script>
+
+		<script th:inline="javascript">
+			$(document)
+					.ready(
+							function() {
+
+								/* initialize the external events
+								/* 	-----------------------------------------------------------------*/
+								/* $('#external-events .fc-event').each(
+										function() {
+											// store data so the calendar knows to render an event upon drop
+											$(this).data('event', {
+												title : $.trim($(this).text()), // use the element's text as the event title
+												stick : true
+											// maintain when user navigates (see docs on the renderEvent method)
+											});
+
+											// make the event draggable using jQuery UI
+											$(this).draggable({
+												zIndex : 999,
+												revert : true, // will cause the event to go back to its
+												revertDuration : 0
+											//  original position after the drag
+											});
+
+										});  */
+
+								/* initialize the calendar
+								-----------------------------------------------------------------*/
+								var events = [];
+								var token = $('#_csrf').attr('content');
+								var header = $('#_csrf_header').attr('content');
+
+								$.ajax({
+									url : '/manager/getEvent',
+									type : 'GET',
+									beforeSend : function(xhr) {
+										xhr.setRequestHeader(header, token);
+									},
+									dataType : 'json',
+									contentType : 'application/json',
+									success : function(data) {
+										$.each(data, function(i, v) {
+											 events.push({
+												id:v.id,
+												title : v.intitule,
+												description : v.description,
+												profil:v.profils.id,
+												contrat:v.contrats.id,
+												start : moment(v.dateTimeDebut).format('YYYY-MM-DD HH:mm:ss'),
+												end : moment(v.dateTimeFin).format('YYYY-MM-DD HH:mm:ss'),
+												className : v.themeColor,
+											}) 
+
+										})
+                                     
+										GenerateCalendar(events);
+									},
+									error : function(error) {
+										console.log("errror");
+										console.log(error);
+										GenerateCalendar(null);
+									}
+
+								});
+
+								
+								
+								
+								
+							});
+
+			
+			
+			
+			
+			
+			
+			
+						function addEvent() {
+							console.log($("#start").val());
+							var token = $('#_csrf').attr('content');
+							var header = $('#_csrf_header').attr('content');
+							$.ajax({
+								url : '/manager/CreateEvent',
+								type : 'POST',
+								beforeSend : function(xhr) {
+									xhr.setRequestHeader(header, token);
+								},
+								data :{
+									title : $("#intitule").val(),
+									start : $("#start").val(),
+									description : $("#description").val(),
+									profils : $("#profil").val(),
+									contrats:$("#contrat").val(),
+									end : $("#end").val(),
+									username:$("#user").text(),
+									id:$("#id").val(),
+									color:$("#colour").val()
+								},
+								success : function(data) {
+									
+									alert(data)
+									var eventData;
+									eventData = {
+									id:$("#id").val(),
+									title : $("#intitule").val(),
+									start : $("#start").val(),
+									description : $("#description").val(),
+									profil : $("#profil").val(),
+									contrat:$("#contrat").val(),
+									end : $("#end").val(),
+									className:$("#colour").val(),
+							};
+									$('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+									$('#calendar').fullCalendar('unselect');
+									
+						},error :function(output){
+							console.log(output);
+						  alert("errrrrrrrrr");	
+						}
+						});
+					}
+						function GenerateCalendar(events) {
+						   
+
+							$('#calendar')
+									.fullCalendar(
+											{
+												lang : 'fr-ch',
+												header : {
+													left : 'prev,next today',
+													center : 'title',
+													right : 'month,agendaWeek,agendaDay,list'
+												},
+												editable : true,
+												eventLimit : true, // allow "more" link when too many events
+												events : events,
+												selectable : true,
+												selectHelper : true,
+												droppable : true, // this allows things to be dropped onto the calendar
+												select : function(start, end) {
+													$("#id").val("");
+													$("#intitule").val("");
+													$("#start").val("");
+													$("#end").val("");
+													$("#description").val("");
+													$("#profil").val("");
+													$("#contrat").val("");
+													$("#color").val("");
+													$('#myModal').modal('show');
+													$("#start")
+															.val(moment(start).format('YYYY-MM-DD HH:mm:ss'));
+													$("#end")
+															.val(moment(end).format('YYYY-MM-DD HH:mm:ss'));
+												},
+												eventClick : function(event, jsEvent,view) { //event is clicked
+													console.log(event)
+													console.log(event.className[0])
+													$("#id").val(event.id),
+													$("#intitule").val(event.title);
+													$("#description").val(event.description);
+													$("#profil").val(event.profil);
+													$("#contrat").val(event.contrat);
+													$("#color").val(event.className[0]);
+													$('#myModal').modal('show');
+												
+												},
+
+												
+												drop : function() {
+
+												}
+											});
+
+						}
+			
+		</script>
+	</th:block>
+
+
+
+</body>
+</html>

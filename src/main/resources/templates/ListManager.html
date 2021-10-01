@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="Layout">
+<head>
+<meta charset="utf-8" />
+<title>ffff</title>
+<style type="text/css">
+
+/* Important part */
+.modal-dialog2 {
+	overflow-y: initial !important
+}
+
+.modal-body2 {
+	height: 400px;
+	overflow-y: auto;
+}
+
+</style>
+</head>
+
+<body>
+
+	<div layout:fragment="content">
+		<div class="container">
+			<div class="row ">
+				<div class="col-xs-24 col-sm-24 col-md-12 col-lg-12 col-xl-12">
+					<div class="card mb-3">
+						<div class="card-header">
+							<h3>
+								<i class="fa fa-users"></i> Managers Details
+							</h3>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
+							non luctus metus. Vivamus fermentum ultricies orci sit amet
+							sollicitudin.
+						</div>
+
+						<div class="card-body">
+							<table id="datatable"
+								class="table table-bordered table-responsive-xl table-hover display ">
+								<thead>
+									<tr>
+										<th>Nom</th>
+										<th>Prenom</th>
+										<th>email</th>
+										<th>Date De Naissance</th>
+										<th>Date d'embauche</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="seria : ${User}" id="manager-${seria.id}">
+										<td th:text="${seria.nom}"></td>
+										<td th:text="${seria.prenom}"></td>
+										<td th:text="${seria.email}"></td>
+										<td th:text="${seria.dateNaissance}"></td>
+										<td th:text="${seria.dateEmbauche}"></td>
+										<td>
+											<button type="button" class="btn btn-outline-danger"
+												data-toggle="modal" data-target="#exampleModal">
+												<i class="fa fa-trash bigfonts" aria-hidden="true"></i>
+											</button>
+											<button type="button" class="btn btn-outline-info">
+												<a th:href="@{/admin/Enregistrer/{id}(id=${seria.id})}">
+													<i class="fa fa-info-circle bigfonts" aria-hidden="true"></i>
+												</a>
+											</button>
+											<button type="button" class="btn btn-outline-success"
+												data-toggle="modal" data-target=".bd-example-modal-lg"
+												th:data-thing="${seria.id}"
+												th:onclick="manager(this.getAttribute('data-thing'));">
+												<i class="fa fa-group bigfonts" aria-hidden="true"></i>
+											</button>
+
+										</td>
+
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+
+		<!-- Affectation modal -->
+
+		<div class="modal fade bd-example-modal-lg" tabindex="-1"
+			role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-dialog2 modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Large title</h5>
+
+
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body modal-body2">
+
+						<table id="datatable2"
+							class="table table-bordered table-responsive-xl table-hover display">
+
+							<thead>
+								<tr>
+									<th>Nom</th>
+									<th>Prenom</th>
+									<th>email</th>
+									<th>Date d'embauche</th>
+									<th>Date D' Affectation</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+
+						</table>
+
+					</div>
+					<div>
+						<hr />
+
+						<div class="container">
+							<label for="example3"> Ajtouter Un Prestataire: </label> <br />
+							<select class="form-control select2 " id="example3"
+								th:value="${PresNonAff}" name="PresNonAff"
+								style="display: inline-block; width: 90%;" multiple="multiple">
+								<option th:each="Pres : ${PresNonAff}" th:value="${Pres.Id}"
+									th:text="${Pres.nom +' '+ Pres.prenom} "></option>
+
+							</select>
+
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary form-control"
+								id="btn-AffecterPresManager" onclick="AffecterPresManager()">Save
+								changes</button>
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<!-- th:data-thing="${seria.affecter}" th:onclick="manager(this.getAttribute('data-thing'));"  -->
+		<input type="hidden" id="HiddenManagerId" />
+
+
+		<!-- delete Model -->
+		<div class="modal fade" id="exampleModal" tabindex="-1" role="alert"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog " role="alert">
+				<div class="modal-content">
+					<div class="alert alert-danger" role="alert">
+						Attention!
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body"></div>
+					<div class="modal-footer">
+
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-danger">Delete</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- End content -->
+
+
+
+
+
+
+
+
+	<th:block layout:fragment="scripts">
+		<script src="../static/plugins/select2/js/select2.min.js"
+			th:src="@{/plugins/select2/js/select2.min.js}"></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"
+			th:src="@{https://unpkg.com/sweetalert/dist/sweetalert.min.js}">
+			</script>
+
+
+		<script type="text/javascript" th:inline="javascript">
+			$(document).ready(function() {
+			    $('.select2').select2();
+
+				$('#datatable').dataTable({
+					"paging": false,
+					'aoColumnDefs' : [ {
+						'bSortable' : false,
+						'aTargets' : [ -1 ]
+					/* 1st one, start by the right */
+					} ]
+				});
+			var table=$('#datatable2').DataTable(
+						{  
+							'aoColumnDefs' : [ {
+								'bSortable' : false,
+								'aTargets' : [ -1 ]
+							/* 1st one, start by the right */
+							} ],
+							"paging": false,
+						    data:null,
+						    columns: [
+						        { data: 'nom' },
+						        { data: 'prenom'},
+						        { data: 'email'},
+						        { data: 'date Embauche'},
+						        { data: 'date Affectation'},
+						        {
+						        	  data: 'id',
+						        	  render: function ( data, type, row ) {
+						        		  return '<button class="btn btn-success" id="aff"   value="'+data+'"><i class="fa fa-check-square-o bigfonts" aria-hidden="true"></i></button>';
+						        	  }						        	  
+						       }
+						        
+						    ]
+						});
+			});
+			var greeter = function(element) {
+               
+	             var a= element.parentNode.parentNode.rowIndex-1;
+	             console.log(a);
+     
+			    [# th:each="salut : ${User[0].affecter}"]    
+			      alert([[${salut.prestataire.nom}]] + " ");
+			    [/]
+			}
+		  function manager(id){
+			  var token = $('#_csrf').attr('content');
+				var header = $('#_csrf_header').attr('content');
+				$("#HiddenManagerId").val(id);
+				
+				$.ajax({				
+					url : '/admin/GetUser',
+					type : 'GET',
+					 beforeSend: function(xhr) {
+                        xhr.setRequestHeader(header, token);
+                    } ,  
+                    dataType: 'json',
+                    data : {
+     				 	id:id
+                    },
+					success : function(data) {
+							var donner = {
+							    affecter: []
+							};
+
+							data.map(function(da) {        
+							   donner.affecter.push({ 
+								   "id":da.affectation.find(obj => {return obj.dateFin === null}).id,
+							        "nom" : da.nom,
+							        "prenom"  : da.prenom,
+							        "email"   : da.email,
+							        "date Embauche"   : da.dateEmbauche,
+							        "date Affectation"  : da.affectation.find(obj => {return obj.dateFin === null}).dateDebut,
+
+							    });
+							})
+						 
+							
+						 var table=$('#datatable2').DataTable();
+								   table.clear().draw();
+								   table.rows.add(donner.affecter); 
+								   table.columns.adjust().draw(); 
+					},
+					error : function(output) {
+						alert("mablanch"+ output);
+						console.log(output);
+					}
+				});
+
+		  }
+		  $(document).on('click', '#aff', function () {
+			  var token = $('#_csrf').attr('content');
+				var header = $('#_csrf_header').attr('content');
+				var a=$(this);
+			    $(this).attr("disabled", true);
+			    swal({
+			    	  title: "Are you sure?",
+			    	  text: "Once deleted, you will not be able to recover this imaginary file!",
+			    	  icon: "warning",
+			    	  buttons: true,
+			    	  dangerMode: true,
+			    	})
+			    	.then((willDelete) => {
+			    	  if (willDelete) {
+			    		  $.ajax({				
+								url : '/admin/FinAffectation',
+								type : 'POST',
+								 beforeSend: function(xhr) {
+			                        xhr.setRequestHeader(header, token);
+			                    } ,  
+			                    data : {
+			     				 	id:$(this).val(),
+			                    },
+			   	                  success: function(response) {
+			   	                	 a.removeClass("btn-success");
+			   	  			          a.addClass("btn-danger");
+			   	  			    },
+			                     failed:function(data){
+			                    	  a.attr("disabled", false);
+			                    	  
+			                     }
+							});
+			    	    swal("Poof! Your desaffecta ed!", {
+			    	      icon: "success",
+			    	    });
+			    	  } else {
+			    		  a.attr("disabled", false);
+			    	  }
+			    	});
+			});
+
+        function AffecterPresManager(){
+        	
+        	
+        	
+        	$("#btn-AffecterPresManager").attr("disabled", true);
+        	 var token = $('#_csrf').attr('content');
+				var header = $('#_csrf_header').attr('content');
+				console.log($("#example3").val().map(Number));
+				var a=[];
+				a.push($("#example3").val());
+				
+				$.ajax({				
+					url : '/admin/AjouterAffectation',
+					type : 'POST',
+					 beforeSend: function(xhr) {
+                     xhr.setRequestHeader(header, token);
+                 } ,  
+                 data : {
+                	 "idUser[]" :a,
+                	 "idManager" :$("#HiddenManagerId").val(),
+                 },
+	             success: function(response) {
+	            	 swal("Poof! nesh a wado", {
+	            	      icon: "success",
+	            	    });
+		             	location.reload();
+                 },
+                 failed:function(data){
+                	 console.log("errror"+data)
+                 }
+				});
+				
+        }
+		
+
+		</script>
+
+
+
+	</th:block>
+
+
+	<!-- END main -->
+
+</body>
+</html>

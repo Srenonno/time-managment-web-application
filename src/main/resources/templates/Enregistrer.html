@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="https://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="Layout.html">
+
+<head>
+<meta charset="utf-8" />
+
+<!-- Bootstrap CSS -->
+
+<link href="../static/plugins/datetimepicker/css/daterangepicker.css"
+	th:href="@{/plugins/datetimepicker/css/daterangepicker.css}"
+	rel="stylesheet" />
+
+<script src="../static/js/modernizr.min.js"
+	th:src="@{/js/modernizr.min.js}"></script>
+<script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script src="../static/js/moment.min.js" th:src="@{/js/moment.min.js}"></script>
+
+</head>
+<body>
+	<th:block layout:fragment="content">
+
+		<div class="container">
+			<div class="row ">
+				<div class="col-xs-18 col-sm-18 col-md-9 col-lg-9 col-xl-9">
+					<div th:if="${param.success}"
+						class="alert alert-success alert-dismissable">
+						<p>
+							<i class="fa fa-check-square bigfonts" aria-hidden="true"></i><span>Utilisateur
+								Enregistrer.</span>
+						</p>
+					</div>
+					<div class="card mb-3">
+
+						<div class="card-header">
+
+							<h3>
+								<i class="fa fa-check-square-o"></i> Un simple formulaire
+							</h3>
+
+						</div>
+						<div class="card-body">
+							<form action="#" th:action="@{/admin/AjouterEmployer}" id="save"
+								method="post">
+								 <input type="hidden" id="id" th:value="${id}" name="id"/>
+								<div class="form-group">
+									<label for="nom">Nom (obligatiore)</label> <input type="text"
+										class="form-control" id="nom" th:value="${nom}"
+										aria-describedby="Entrer nom" name="nom" 
+										placeholder="Entrer nom" obligatoire> <small
+										class="form-text text-muted">We'll never share your
+										email with anyone else.</small>
+								</div>
+								<div class="form-group">
+									<label for="prenom">Prenom (obligatoire)</label> <input
+										type="text" class="form-control" id="prenom"
+										aria-describedby="Entrer prenom" th:value="*{prenom}"
+										placeholder="entrer prenom" name="prenom" obligatoire>
+								</div>
+								<div class="form-group">
+									<label for="prenom">Address (obligatoire)</label>
+
+									<textarea obligatoire class="form-control" id="address"
+										th:value="*{address}" name="address"></textarea>
+								</div>
+								<div class="form-group">
+									<label for="prenom">Date D'embauche (obligatoire)</label> <input
+										type="text" class="form-control" th:value="*{dateEmbauche}"
+										id="embauche" name="dateEmbauche" obligatoire>
+
+									<script>
+										$(function() {
+											$('input[name="dateEmbauche"]')
+													.daterangepicker(
+															{
+																singleDatePicker : true,
+																showDropdowns : true,
+																locale : {
+																	format : 'YYYY-MM-DD',
+																	"separator": " - ",
+															        "applyLabel": "Apply",
+															        "cancelLabel": "Cancel",
+															        "fromLabel": "From",
+															        "toLabel": "To",
+															        "customRangeLabel": "Custom",
+															        "daysOfWeek": [
+															            "Di",
+															            "Lu",
+															            "Mar",
+															            "Mer",
+															            "Je",
+															            "Ven",
+															            "Sa"
+															        ],
+															        "monthNames": [
+															            "Janvier",
+															            "Fevrier",
+															            "Mars",
+															            "Avril",
+															            "Mai",
+															            "Juin",
+															            "Juillet",
+															            "Aout",
+															            "September",
+															            "October",
+															            "November",
+															            "December"
+															        ],
+															        "firstDay": 1
+															    }
+															});
+										});
+									</script>
+									<small id="prenom" class="form-text text-muted">We'll
+										never share your email with anyone else.</small>
+								</div>
+								<div class="form-group">
+									<label for="prenom">Date De Naissance (obligatoire)</label> <input
+										type="text" class="form-control" th:value="*{dateNaissance}"
+										name="dateNaissance" id="naissance" obligatoire>
+
+									<script>
+										$(function() {
+											$('input[name="dateNaissance"]')
+													.daterangepicker(
+															{
+																singleDatePicker : true,
+																showDropdowns : true,
+																locale : {
+																	format : 'YYYY-MM-DD',
+																	"separator": " - ",
+															        "applyLabel": "Apply",
+															        "cancelLabel": "Cancel",
+															        "fromLabel": "From",
+															        "toLabel": "To",
+															        "customRangeLabel": "Custom",
+															        "daysOfWeek": [
+															            "Di",
+															            "Lu",
+															            "Mar",
+															            "Mer",
+															            "Je",
+															            "Ven",
+															            "Sa"
+															        ],
+															        "monthNames": [
+															            "Janvier",
+															            "Fevrier",
+															            "Mars",
+															            "Avril",
+															            "Mai",
+															            "Juin",
+															            "Juillet",
+															            "Aout",
+															            "September",
+															            "October",
+															            "November",
+															            "December"
+															        ],
+															        "firstDay": 1
+															    }
+															});
+
+										});
+									</script>
+									
+								</div>
+								<div class="form-group">
+									<label for="exampleInputEmail1">Address Email(obligatoire)</label>
+									<input type="email" class="form-control" id="email"
+										th:value="*{email}" name="email" aria-describedby="emailHelp"
+										placeholder="entrer email" obligatoire> <small
+										id="emailHelp" class="form-text text-muted">We'll
+										never share your email with anyone else.</small>
+								</div>
+								<div class="form-group">
+									<select class="custom-select d-block my-3" th:value="${roles}"
+										name="roles" style="height: 35px;" id="role" obligatoire>
+										<option value="">--</option>
+										<option th:each="r : ${roles}" th:value="${r.Id}"
+											th:text="${r.name}" />
+									</select>
+
+								</div>
+								<div class="form-group">
+									<label for="exampleInputPassword1">Mot de passe (obligatoire)</label>
+									<input type="password" class="form-control" id="psw"
+										th:value="*{password}" name="password" placeholder="Password"
+										obligatoire>
+								</div>
+								<div class="form-group">
+									<label for="exampleInputPassword1">Confirmer le mot de passe
+										(obligatoire)</label> <input type="password" class="form-control"
+										id="conpsw" placeholder="Password" obligatoire> <span
+										id='message'></span>
+
+								</div>
+
+								<button type="submit" class="btn btn-primary"  th:text="${param.update} ? 'Update' : 'Enregistrer'"></button>
+							</form>
+						</div>
+					</div>
+					<div th:if="${param.update}"
+						class="alert alert-info alert-dismissable">
+						<p>
+							<i class="fa fa-check-square bigfonts" aria-hidden="true"></i><span>Utilisateur
+								update.</span>
+								
+						</p>
+					</div>
+					<!-- end card-->
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+	<th:block layout:fragment="scripts">
+
+		<script src="../static/plugins/datetimepicker/js/moment.min.js"
+			th:src="@{/plugins/datetimepicker/js/moment.min.js}"></script>
+
+		<script src="../static/plugins/datetimepicker/js/daterangepicker.js"
+			th:src="@{/plugins/datetimepicker/js/daterangepicker.js}"></script>
+
+		<script th:inline="javascript">
+			$('#psw, #conpsw').on('keyup', function() {
+				if ($('#psw').val() == $('#conpsw').val()) {
+					$('#message').html('Matching').css('color', 'green');
+				} else
+					$('#message').html('Not Matching').css('color', 'red');
+			});
+			$(document).ready(function() {
+				/*<![CDATA[*/
+			      var isInlineEdit = [[${param.update}!= null ? true:false]];
+			      /*]]>*/
+			      if(isInlineEdit){
+
+			    	  var message = null;	
+			    	  alert(message);
+			      }else{
+			        //no in line edit
+			      }
+			   
+			});
+
+			
+		</script>
+
+	</th:block>
+
+
+</body>
+</html>
